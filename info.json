@@ -1,0 +1,10 @@
+{
+    "name": "tater_spacestation",
+    "version": "0.1.0",
+    "title": "Taterjr Space Station",
+    "author": "taterjr",
+    "contact": "",
+    "homepage": "",
+    "factorio_version": "0.16",
+    "description": "Adds a playable spacestation"
+}
