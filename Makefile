@@ -27,7 +27,6 @@ package-copy: $(PKG_DIRS) $(PKG_FILES)
 	mkdir -p $(OUTPUT_DIR)
 ifneq ($(PKG_COPY),)
 	cp -r $(PKG_COPY) pkg/$(OUTPUT_NAME)
-	cp -r $(PKG_COPY) ~/.factorio/mods/$(OUTPUT_NAME)
 endif
 
 $(OUTPUT_DIR)/%.lua: %.lua
@@ -41,6 +40,9 @@ $(OUTPUT_DIR)/%: %
 
 package: package-copy $(OUT_FILES)
 	cd pkg && zip -r $(OUTPUT_NAME).zip $(OUTPUT_NAME)
+
+install: package
+	cp -r pkg/$(OUTPUT_NAME) ~/.factorio/mods
 
 clean:
 	rm -rf pkg/$(OUTPUT_NAME)
