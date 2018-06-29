@@ -1,31 +1,10 @@
-local spaceStationTile = table.deepcopy(data.raw.tile["grass-1"])
+local spaceStationTile = table.deepcopy(data.raw.tile["refined-concrete"])
 local updates = {
    name = "space-station-tile",
    --minable = {hardness = 0.2, mining_time = 0.5, result = "space-station-tile"},
    collision_mask = {
       --"ground-tile",
       "layer-11",
-   },
-   variants = {
-      main = {
-	 {
-	    picture = "__base__/graphics/terrain/lab-tiles/lab-white.png",
-	    count = 1,
-	    size = 1,
-	 },
-      },
-      inner_corner = {
-	 picture = "__base__/graphics/terrain/out-of-map-inner-corner.png",
-	 count = 0,
-      },
-      outer_corner = {
-	 picture = "__base__/graphics/terrain/out-of-map-outer-corner.png",
-	 count = 0,
-      },
-      side = {
-	 picture = "__base__/graphics/terrain/out-of-map-side.png",
-	 count = 0,
-      },
    },
 }
 

@@ -14,11 +14,11 @@ local updates = {
    selection_box = {{-4, -4}, {4, 4}},
    inventory_size = 1000,
    picture = {
-      filename = "__base__/graphics/entity/assembling-machine-1/assembling-machine-1.png",
+      filename = "__tater_spacestation__/graphics/space_elevator/space_elevator.png",
       priority = "high",
-      width = 108,
-      height = 110,
-      shift = { 0, 0},
+      width = 320,
+      height = 256,
+      shift = { 1, 0},
    },
 }
 
