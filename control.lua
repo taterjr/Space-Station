@@ -156,6 +156,26 @@ local function destroy_space_elevator(event)
 end
 
 --##############################################################################
+--tiles
+--##############################################################################
+local function remove_space_station(event)
+   if event.item.name ~= "space-tile" then return end
+   local placer = nil
+   if event.name == defines.events.on_player_built_tile then
+      placer = game.players[event.player_index]
+   else
+      placer = event.robot
+   end
+   local count = 0
+   for i, tile in pairs(event.tiles) do
+      count = count + 1
+   end
+   local inserted = placer.insert({name = "space-station-tile", count = count})
+   if count - inserted > 0 then
+      placer.surface.spill_item_stack(placer.position, {name = "space-station-tile", count = count - inserted})
+   end
+end
+--##############################################################################
 --transportation between space and nauvis
 --##############################################################################
 local function teleport_players()
@@ -257,8 +277,10 @@ script.on_event({defines.events.on_built_entity, defines.events.on_robot_built_e
       create_space_elevator(event)
 end)
 
+script.on_event({defines.events.on_player_built_tile, defines.events.on_robot_built_tile}, function(event)
+      remove_space_station(event)
+end)
+
 script.on_event({defines.events.on_player_mined_entity, defines.events.on_robot_mined_entity, defines.events.on_entity_died}, function(event)
       destroy_space_elevator(event)
 end)
-
-

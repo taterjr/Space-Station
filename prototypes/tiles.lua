@@ -1,7 +1,7 @@
 local spaceStationTile = table.deepcopy(data.raw.tile["refined-concrete"])
 local updates = {
    name = "space-station-tile",
-   --minable = {hardness = 0.2, mining_time = 0.5, result = "space-station-tile"},
+   minable = {hardness = 0, mining_time = -1, result = "space-station-tile"},
    collision_mask = {
       --"ground-tile",
       "layer-11",
@@ -11,6 +11,7 @@ local updates = {
 for k,v in pairs(updates) do
    spaceStationTile[k] = updates[k]
 end
+spaceStationTile["minable"] = nil
 
 local spaceTile = table.deepcopy(data.raw.tile["grass-1"])
 
