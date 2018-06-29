@@ -2,10 +2,10 @@ data:extend({
       {
 	 type = "item-group",
 	 name = "space-station",
-	 order = "a",
-	 inventory_order = "a",
-	 icon = "__base__/graphics/item-group/production.png",
-	 icon_size = 64,
+	 order = "z",
+	 inventory_order = "z",
+	 icon = "__tater_spacestation__/graphics/space_elevator/space_elevator.png",
+	 icon_size = 256,
       },
       {
 	 type = "item-subgroup",

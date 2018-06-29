@@ -1,6 +1,8 @@
 local spaceElevator= table.deepcopy(data.raw.item["assembling-machine-1"])
 local updates = {
    name = "space-elevator",
+   icon = "__tater_spacestation__/graphics/space_elevator/space_elevator.png",
+   icon_size = 256,
    place_result = "space-elevator",
    subgroup = "space-station",
 }
@@ -20,7 +22,7 @@ for k,v in pairs(updates) do
    spaceElevatorChest[k] = updates[k]
 end
 
-local spaceStationTile = table.deepcopy(data.raw.item["landfill"])
+local spaceStationTile = table.deepcopy(data.raw.item["refined-concrete"])
 local updates = {
    name = "space-station-tile",
    subgroup = "space-station",
@@ -38,6 +40,8 @@ end
 local spaceTile = table.deepcopy(data.raw.item["landfill"])
 local updates = {
    name = "space-tile",
+   icon = "__tater_spacestation__/graphics/space.png",
+   icon_size = 32,
    subgroup = "space-station",
    place_as_tile = {
       result = "space-tile",
