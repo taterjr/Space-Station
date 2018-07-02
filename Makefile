@@ -21,6 +21,8 @@ OUT_FILES := $(SED_FILES:%=$(OUTPUT_DIR)/%)
 SED_EXPRS := -e 's/{{MOD_NAME}}/$(PACKAGE_NAME)/g'
 SED_EXPRS += -e 's/{{VERSION}}/$(VERSION_STRING)/g'
 
+FACTORIO_BIN = ~/.steam/steam/steamapps/common/Factorio/bin/x64/factorio
+
 all: package
 
 package-copy: $(PKG_DIRS) $(PKG_FILES)
@@ -43,6 +45,9 @@ package: package-copy $(OUT_FILES)
 
 install: package
 	cp -r pkg/$(OUTPUT_NAME) ~/.factorio/mods
+
+run: install
+	$(FACTORIO_BIN)
 
 clean:
 	rm -rf pkg/$(OUTPUT_NAME)
