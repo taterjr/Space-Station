@@ -39,7 +39,30 @@ local updates = {
 for k,v in pairs(updates) do
    spaceElevatorChest[k] = updates[k]
 end
+
+local spaceAssembler = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-1"])
+local updates = {
+   name = "space-assembling-machine",
+   minable = {
+      hardness = 0.2,
+      mining_time = 0.5,
+      result = "space-assembling-machine",
+   },
+   collision_mask = {
+      "item-layer",
+      "object-layer",
+      "player-layer",
+      "water-tile",
+      "layer-12",
+   },
+}
+
+for k,v in pairs(updates) do
+   spaceAssembler[k] = updates[k]
+end
+
 data:extend({
       spaceElevator,
       spaceElevatorChest,
+      spaceAssembler,
 })

@@ -54,9 +54,21 @@ for k,v in pairs(updates) do
     spaceTile[k] = updates[k]
 end
 
+local spaceAssembler = table.deepcopy(data.raw.item["assembling-machine-1"])
+local updates = {
+   name = "space-assembling-machine",
+   place_result = "space-assembling-machine",
+   subgroup = "space-station",
+}
+
+for k,v in pairs(updates) do
+   spaceAssembler[k] = updates[k]
+end
+
 data:extend({
       spaceElevator,
       spaceElevatorChest,
       spaceStationTile,
       spaceTile,
+      spaceAssembler,
 })
