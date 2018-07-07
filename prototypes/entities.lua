@@ -40,7 +40,7 @@ for k,v in pairs(updates) do
    spaceElevatorChest[k] = updates[k]
 end
 
-local spaceAssembler = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-1"])
+local spaceAssembler = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"])
 local updates = {
    name = "space-assembling-machine",
    minable = {
@@ -55,6 +55,7 @@ local updates = {
       "water-tile",
       "layer-12",
    },
+   crafting_categories = {"crafting", "advanced-crafting", "crafting-with-fluid", "space-station"},
 }
 
 for k,v in pairs(updates) do

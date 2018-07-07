@@ -54,7 +54,7 @@ for k,v in pairs(updates) do
     spaceTile[k] = updates[k]
 end
 
-local spaceAssembler = table.deepcopy(data.raw.item["assembling-machine-1"])
+local spaceAssembler = table.deepcopy(data.raw.item["assembling-machine-3"])
 local updates = {
    name = "space-assembling-machine",
    place_result = "space-assembling-machine",
