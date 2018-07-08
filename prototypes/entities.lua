@@ -43,11 +43,13 @@ end
 local spaceAssembler = table.deepcopy(data.raw["assembling-machine"]["assembling-machine-3"])
 local updates = {
    name = "space-assembling-machine",
+   icon = "__tater_spacestation__/graphics/space_assembling_machine/space-assembling-machine-icon.png",
    minable = {
       hardness = 0.2,
       mining_time = 0.5,
       result = "space-assembling-machine",
    },
+   crafting_speed = 2,
    collision_mask = {
       "item-layer",
       "object-layer",
@@ -57,6 +59,8 @@ local updates = {
    },
    crafting_categories = {"crafting", "advanced-crafting", "crafting-with-fluid", "space-station"},
 }
+spaceAssembler.animation.layers[1].filename = "__tater_spacestation__/graphics/space_assembling_machine/space-assembling-machine.png"
+spaceAssembler.animation.layers[1].hr_version.filename = "__tater_spacestation__/graphics/space_assembling_machine/space-assembling-machine.png"
 
 for k,v in pairs(updates) do
    spaceAssembler[k] = updates[k]
