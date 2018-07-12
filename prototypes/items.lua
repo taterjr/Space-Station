@@ -54,9 +54,23 @@ for k,v in pairs(updates) do
     spaceTile[k] = updates[k]
 end
 
+local spaceAssembler = table.deepcopy(data.raw.item["assembling-machine-3"])
+local updates = {
+   name = "space-assembling-machine",
+   icon = "__tater_spacestation__/graphics/space_assembling_machine/space-assembling-machine-icon.png",
+   icon_size = 32,
+   place_result = "space-assembling-machine",
+   subgroup = "space-station",
+}
+
+for k,v in pairs(updates) do
+   spaceAssembler[k] = updates[k]
+end
+
 data:extend({
       spaceElevator,
       spaceElevatorChest,
       spaceStationTile,
       spaceTile,
+      spaceAssembler,
 })

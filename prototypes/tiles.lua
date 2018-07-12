@@ -63,3 +63,10 @@ data:extend({
       spaceStationTile,
       spaceTile,
 })
+
+for item, data in pairs(data.raw.tile) do
+   if data.name == "space-tile" or data.name == "space-station-tile" then return end
+   --log(data.name)
+   table.insert(data.collision_mask, "layer-12")
+   --log(serpent.block(data.collision_mask))
+end
