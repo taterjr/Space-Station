@@ -1,6 +1,5 @@
 [entity-name]
 space-elevator=Space Elevator
-space-assembling-machine=Space Assembling Machine
 
 [entity-description]
 space-elevator=Transports items between the Space Station and Nauvis.
@@ -24,5 +23,3 @@ chunk-not-generated=Invalid position! Chunks are not loaded here.
 planet-to-space-transportation=Planet to Space Transportation
 
 [tile-name]
-space-station-tile=Space Station
-space-tile=Space
