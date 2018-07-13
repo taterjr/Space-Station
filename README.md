@@ -13,11 +13,11 @@ This mod lets you build a factory in space and adds an alternative way to produc
 	<!--image/gif of space factory-->
 ## Todo
 - do ground and space elevator graphics
-- space graphics
-- space station graphics
 - recolor space elevator
 
 ## Changelog
 0.1.0
 - initial release
+0.1.1
+- Updated space graphics to be like the [SpaceshipSurface mod](https://mods.factorio.com/mod/SpaceshipSurface)
   
