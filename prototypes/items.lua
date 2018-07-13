@@ -25,6 +25,7 @@ end
 local spaceStationTile = table.deepcopy(data.raw.item["refined-concrete"])
 local updates = {
    name = "space-station-tile",
+   icon = "__tater_spacestation__/graphics/landfill.png",
    subgroup = "space-station",
    place_as_tile = {
       result = "space-station-tile",
