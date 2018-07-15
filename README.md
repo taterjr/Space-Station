@@ -18,6 +18,10 @@ This mod lets you build a factory in space and adds an alternative way to produc
 - recolor space elevator
 
 ## Changelog
-0.1.0
-- initial release
-  
+0.1.0  
+-initial release  
+0.1.1  
+-Updated space graphics to be like the [SpaceshipSurface mod](https://mods.factorio.com/mod/SpaceshipSurface)  
+0.1.2  
+-Fixed bug causing water to become space  
+-Made Space Assembler require technology  
