@@ -30,7 +30,7 @@ end
 local spaceAssembler = {
    type = "recipe",
    name = "space-assembling-machine",
-   enabled = true,
+   enabled = false,
    ingredients = {
       {"assembling-machine-3", 1},
       {"low-density-structure", 10},
@@ -70,7 +70,7 @@ end
 local spaceScience = {
    type = "recipe",
    name = "space-science",
-   enabled = true,
+   enabled = false,
    category = "space-station",
    ingredients = {
       {"battery", 1},
