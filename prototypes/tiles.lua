@@ -272,7 +272,6 @@ local updates = {
       "player-layer",
       "doodad-layer"
     },
-    autoplace = water_autoplace_settings(0),
     draw_in_water_layer = true,
     layer = 2,
     variants =
