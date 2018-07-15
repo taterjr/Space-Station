@@ -13,8 +13,6 @@ This mod lets you build a factory in space and adds an alternative way to produc
 	<!--image/gif of space factory-->
 ## Todo
 - do ground and space elevator graphics
-- space graphics
-- space station graphics
 - recolor space elevator
 
 ## Changelog
