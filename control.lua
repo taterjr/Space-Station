@@ -52,6 +52,86 @@ local function init_globals()
    global.space_elevator = {}
    global.spaceSurface = create_space_surface()
 end
+
+--##############################################################################
+-- utils
+-- For creating linked entities
+--##############################################################################
+local function get_linking_surface(surface)
+   if surface == global.spaceSurface then
+      return game.surfaces[1]
+   else
+      return global.spaceSurface
+   end
+end
+
+local function is_chunk_generated(linking_surface, entity, entity_size)
+   local chunk_pos = {}
+   chunk_pos.x = math.floor(entity.position.x) / 32
+   chunk_pos.y = math.floor(entity.position.y) / 32
+   for y = chunk_pos.y-1, chunk_pos.y+1 do
+      for x = chunk_pos.x-1, chunk_pos.x+1 do
+	 if not linking_surface.is_chunk_generated{x = x, y = y} then
+	    player_print("The Chunk is not generated! Please try again")
+	    entity.surface.create_entity{
+	       name = "flying-text",
+	       position = entity.position,
+	       text = { "item-limitation.chunk-not-generated" },
+	    }
+	    linking_surface.request_to_generate_chunks(entity.position, math.ceil(entity_size/2) + 1)
+	    entity.destroy()
+	    return false
+	 end
+      end
+   end
+   return true
+end
+
+local function generate_tiles(linking_surface, area)
+   local tile_fill = nil
+   if linking_surface == global.spaceSurface then
+      tile_fill = "space-station-tile"
+   else
+      tile_fill = "grass-1"
+   end
+
+   local tiles = {}
+   for x = area.left_top.x-1, area.right_bottom.x do
+      for y = area.left_top.y-1, area.right_bottom.y do
+	 local tile = linking_surface.get_tile(x,y).name
+	 if string.find(tile, "water") or tile == "space-tile" then
+	    table.insert(tiles, {name = tile_fill, position = {x,y}})
+	 end
+      end
+   end
+   linking_surface.set_tiles(tiles)
+end
+
+local function create_valid_entity(linking_surface, old_entity, new_entity_name) -- new enity name optional
+   local entity_name = new_entity_name or old_entity.name
+
+   if linking_surface.can_place_entity{
+      name = entity_name,
+      position = old_entity.position,
+   } then
+      -- create new entity
+      linking_surface.create_entity{
+	 name = entity_name,
+	 position = old_entity.position,
+	 force = old_entity.force,
+      }
+      return true
+   else 
+      -- entity creation failed
+      old_entity.surface.create_entity{
+	 name = "flying-text",
+	 position = old_entity.position,
+	 text = { "item-limitation.space-not-empty" },
+      }
+      old_entity.destroy()
+      return false
+   end
+end
 --##############################################################################
 -- space elevator
 --##############################################################################
@@ -59,7 +139,7 @@ end
 local function create_space_elevator(event)
    if event.created_entity.name:sub(1, 14) ~= "space-elevator" then return end -- if the entity is not prefixed with space-elevator dont do anything
    local surface = event.created_entity.surface
-   local linking_surface = nil
+   local linking_surface = get_linking_surface(surface)
    local tile_fill = nil
    local entity = event.created_entity
    local new_space_elevator = nil
@@ -67,14 +147,10 @@ local function create_space_elevator(event)
    --player_print(entity.bounding_box.left_top.x .. " " .. entity.bounding_box.left_top.y)
    --player_print(entity.bounding_box.right_bottom.x .. " " .. entity.bounding_box.right_bottom.y)
 
-   if surface == global.spaceSurface then
-      -- link to nauvis
-      linking_surface = game.surfaces[1]
-      tile_fill = "grass-1"
-   else
-      -- link to space
-      linking_surface = global.spaceSurface
+   if linking_surface == global.spaceSurface then
       tile_fill = "space-station-tile"
+   else
+      tile_fill = "grass-1"
    end
 
    --for i, entites in pairs(linking_surface.find_entities(entity.bounding_box)) do
@@ -152,6 +228,63 @@ local function destroy_space_elevator(event)
 
    local space_elevator = linked_surface.find_entity(entity.name, entity.position)
    space_elevator.destroy()
+
+end
+
+
+--##############################################################################
+-- space energy
+--##############################################################################
+local function create_space_energy(event) 
+   -- when a space energy entity is placed
+   -- place the opposite space energy in the opposite surface
+   if event.created_entity.name:sub(1,12) ~= "space-energy" then return end
+
+   -- get opposite space energy
+   local linking_entity_name = nil
+   if event.created_entity.name == "space-energy-input" then
+      linking_entity_name = "space-energy-output"
+   else
+      linking_entity_name = "space-energy-input"
+   end
+
+   -- get opposite surface
+   local linking_surface = get_linking_surface(event.created_entity.surface)
+
+   -- check if chunk is generated
+   if is_chunk_generated(linking_surface, event.created_entity, 2) == false then return end
+
+   -- generate tiles
+   generate_tiles(linking_surface, event.created_entity.selection_box)
+
+   -- check if valid position
+   local created = create_valid_entity(linking_surface, event.created_entity, linking_entity_name)
+   if created then
+      -- add to global.space_energy array
+   else
+      -- return item to player/robot or place item on ground
+   end
+end
+
+local function destroy_space_energy(event)
+   -- when a space energy is destroyed
+   -- destroy the other one in the opposite surface
+   if event.entity.name:sub(1,12) ~= "space-energy" then return end
+
+   -- get opposite surface
+   local linking_surface = get_linking_surface(event.entity.surface)
+
+   -- remove from space_energy array
+
+   -- remove other entity
+   local linking_entity_name = nil
+   if event.entity.name == "space-energy-input" then
+      linking_entity_name = "space-energy-output"
+   else
+      linking_entity_name = "space-energy-input"
+   end
+   local space_energy = linking_surface.find_entity(linking_entity_name, event.entity.position)
+   space_energy.destroy()
 
 end
 
@@ -275,6 +408,7 @@ end)
 script.on_event({defines.events.on_built_entity, defines.events.on_robot_built_entity}, function(event)
       -- link space elevators on the ground and on the space station
       create_space_elevator(event)
+      create_space_energy(event)
 end)
 
 script.on_event({defines.events.on_player_built_tile, defines.events.on_robot_built_tile}, function(event)
@@ -283,4 +417,5 @@ end)
 
 script.on_event({defines.events.on_player_mined_entity, defines.events.on_robot_mined_entity, defines.events.on_entity_died}, function(event)
       destroy_space_elevator(event)
+      destroy_space_energy(event)
 end)

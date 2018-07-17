@@ -66,8 +66,57 @@ for k,v in pairs(updates) do
    spaceAssembler[k] = updates[k]
 end
 
+--space energy input
+local space_energy_input = table.deepcopy(data.raw["electric-energy-interface"]["electric-energy-interface"])
+local updates = {
+   name = "space-energy-input",
+   minable = {
+      hardness = 0.2,
+      mining_time = 0.5,
+      result = "space-energy-input",
+   },
+   energy_source = {
+      type = "electric",
+      usage_priority = "secondary-input",
+      input_flow_limit = "1MW",
+      buffer_capacity = "1MW",
+      render_no_power_icon = false,
+   },
+   energy_usage = "0MW",
+   energy_production = "0MW",
+}
+
+for k,v in pairs(updates) do
+   space_energy_input[k] = updates[k]
+end
+--space energy output
+local space_energy_output= table.deepcopy(data.raw["electric-energy-interface"]["electric-energy-interface"])
+local updates = {
+   name = "space-energy-output",
+   minable = {
+      hardness = 0.2,
+      mining_time = 0.5,
+      result = "space-energy-output",
+   },
+   energy_source = {
+      type = "electric",
+      usage_priority = "secondary-output",
+      input_flow_limit = "1MW",
+      buffer_capacity = "1MW",
+      render_no_power_icon = false,
+   },
+   energy_usage = "0MW",
+   energy_production = "0MW",
+}
+
+for k,v in pairs(updates) do
+   space_energy_output[k] = updates[k]
+end
+
 data:extend({
       spaceElevator,
       spaceElevatorChest,
       spaceAssembler,
+      space_energy_input,
+      space_energy_output,
 })

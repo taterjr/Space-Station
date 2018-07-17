@@ -68,10 +68,35 @@ for k,v in pairs(updates) do
    spaceAssembler[k] = updates[k]
 end
 
+-- space energy input
+local space_energy_input = table.deepcopy(data.raw.item["accumulator"])
+local updates = {
+   name = "space-energy-input",
+   place_result = "space-energy-input",
+   subgroup = "space-station",
+}
+
+for k,v in pairs(updates) do
+   space_energy_input[k] = updates[k]
+end
+-- space energy output
+local space_energy_output = table.deepcopy(data.raw.item["accumulator"])
+local updates = {
+   name = "space-energy-output",
+   place_result = "space-energy-output",
+   subgroup = "space-station",
+}
+
+for k,v in pairs(updates) do
+   space_energy_output [k] = updates[k]
+end
+
 data:extend({
       spaceElevator,
       spaceElevatorChest,
       spaceStationTile,
       spaceTile,
       spaceAssembler,
+      space_energy_input,
+      space_energy_output,
 })
