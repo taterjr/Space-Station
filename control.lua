@@ -50,6 +50,7 @@ local function init_globals()
    
    --global.space_elevator_chest = {}
    global.space_elevator = {}
+   global.space_energy = {}
    global.spaceSurface = create_space_surface()
 end
 
@@ -261,6 +262,7 @@ local function create_space_energy(event)
    local created = create_valid_entity(linking_surface, event.created_entity, linking_entity_name)
    if created then
       -- add to global.space_energy array
+      table.insert(global.space_energy, event.created_entity.position)
    else
       -- return item to player/robot or place item on ground
    end
@@ -275,6 +277,11 @@ local function destroy_space_energy(event)
    local linking_surface = get_linking_surface(event.entity.surface)
 
    -- remove from space_energy array
+   for i, energy_pos in pairs(global.space_energy) do
+      if energy_pos.x == event.entity.position.x and energy_pos.y == event.entity.position.y then
+	 table.remove(global.space_energy, i)
+      end
+   end
 
    -- remove other entity
    local linking_entity_name = nil
@@ -388,6 +395,38 @@ local function teleport_items_chest()
    end
 end
 
+local function teleport_power()
+   --if game.tick % 60 ~= 0 then return end
+   for i, energy_pos in pairs(global.space_energy) do
+      -- find input
+      local output_surface = nil
+      local energy_input = game.surfaces["nauvis"].find_entity("space-energy-input", energy_pos)
+      if energy_input == nil then
+	 energy_input = global.spaceSurface.find_entity("space-energy-input", energy_pos)
+	 output_surface = game.surfaces["nauvis"]
+      else
+	 output_surface = global.spaceSurface
+      end
+
+      -- find output
+      local energy_output = output_surface.find_entity("space-energy-output", energy_pos)
+
+      -- test if entities are valid
+      if energy_input.valid and energy_output.valid then
+	 -- transfer power from input to output
+	 local energy = energy_input.energy + energy_output.energy
+	 local out_buffer = energy_output.electric_buffer_size
+	 if energy > out_buffer then
+	    energy_output.energy = out_buffer
+	    energy_input.energy = energy - out_buffer
+	 else
+	    energy_output.energy = energy
+	    energy_input.energy = 0
+	 end
+      end
+   end
+end
+
 script.on_init(function()
       --create space station surface
       --create_space_surface()
@@ -398,6 +437,7 @@ script.on_event(defines.events.on_tick, function(event)
 		   -- when a player walks into a space elevator teleport them
 		   teleport_players()
 		   teleport_items_chest()
+		   teleport_power()
 end)
 
 script.on_event(defines.events.on_chunk_generated, function(event)
