@@ -82,6 +82,39 @@ local spaceScience = {
    result = "space-science-pack",
 }
 
+-- space energy input
+local space_energy_input = table.deepcopy(data.raw.recipe["accumulator"])
+local updates = {
+   name = "space-energy-input",
+   enabled = false,
+   ingredients = {
+      {"low-density-structure", 10},
+      {"battery", 5},
+   },
+   result = "space-energy-input",
+   result_count = 10,
+}
+
+for k,v in pairs(updates) do
+   space_energy_input[k] = updates[k]
+end
+-- space energy output
+local space_energy_output = table.deepcopy(data.raw.recipe["accumulator"])
+local updates = {
+   name = "space-energy-output",
+   enabled = false,
+   ingredients = {
+      {"low-density-structure", 10},
+      {"battery", 5},
+   },
+   result = "space-energy-output",
+   result_count = 10,
+}
+
+for k,v in pairs(updates) do
+   space_energy_output[k] = updates[k]
+end
+
 data:extend({
       spaceStationCategory,
       spaceElevator,
@@ -90,4 +123,6 @@ data:extend({
       spaceStationTile,
       spaceTile,
       spaceScience,
+      space_energy_input,
+      space_energy_output,
 })

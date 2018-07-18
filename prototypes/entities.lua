@@ -75,6 +75,9 @@ local updates = {
       mining_time = 0.5,
       result = "space-energy-input",
    },
+   collision_box = {{-0.4, -0.4}, {0.4, 0.4}},
+   selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
+   enable_gui = false,
    energy_source = {
       type = "electric",
       usage_priority = "secondary-input",
@@ -84,6 +87,13 @@ local updates = {
    },
    energy_usage = "0MW",
    energy_production = "0MW",
+   picture = {
+      filename = "__tater_spacestation__/graphics/space-energy/space-energy.png",
+      priority = "high",
+      width = 64,
+      height = 128,
+      shift = {0, -1.5},
+   },
 }
 
 for k,v in pairs(updates) do
@@ -98,6 +108,9 @@ local updates = {
       mining_time = 0.5,
       result = "space-energy-output",
    },
+   collision_box = {{-0.4, -0.4}, {0.4, 0.4}},
+   selection_box = {{-0.5, -0.5}, {0.5, 0.5}},
+   enable_gui = false,
    energy_source = {
       type = "electric",
       usage_priority = "secondary-output",
@@ -107,6 +120,13 @@ local updates = {
    },
    energy_usage = "0MW",
    energy_production = "0MW",
+   picture = {
+      filename = "__tater_spacestation__/graphics/space-energy/space-energy.png",
+      priority = "high",
+      width = 64,
+      height = 128,
+      shift = {0, -1.5},
+   },
 }
 
 for k,v in pairs(updates) do

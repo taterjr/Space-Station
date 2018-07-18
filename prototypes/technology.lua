@@ -14,6 +14,14 @@ local updates = {
 	 type = "unlock-recipe",
 	 recipe = "space-tile",
       },
+      {
+	 type = "unlock-recipe",
+	 recipe = "space-energy-input",
+      },
+      {
+	 type = "unlock-recipe",
+	 recipe = "space-energy-output",
+      },
    },
    prerequisites = { "rocket-silo" },
    unit = {
