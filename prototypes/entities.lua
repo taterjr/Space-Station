@@ -1,3 +1,4 @@
+local floor_collision = "layer-" .. settings.startup["tater-spacestation-floor-collision"].value
 local spaceElevator= table.deepcopy(data.raw.container["steel-chest"])
 local updates = {
    name = "space-elevator",
@@ -55,7 +56,7 @@ local updates = {
       "object-layer",
       "player-layer",
       "water-tile",
-      "layer-12",
+      floor_collision,
    },
    crafting_categories = {"crafting", "advanced-crafting", "crafting-with-fluid", "space-station"},
 }

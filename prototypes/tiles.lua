@@ -261,12 +261,12 @@ local grass_transitions_between_transitions =
 }
 
 
+local space_layer = "layer-" .. settings.startup["tater-spacestation-space-collision"].value
 local spaceTile = table.deepcopy(data.raw.tile["grass-1"])
 local updates = {
     name = "space-tile",
-    collision_mask =
-    {
-      "layer-11",
+    collision_mask = {
+       space_layer,
       "item-layer",
       "resource-layer",
       "player-layer",
@@ -274,10 +274,8 @@ local updates = {
     },
     draw_in_water_layer = true,
     layer = 2,
-    variants =
-    {
-      main =
-      {
+    variants = {
+      main = {
         {
           picture = "__tater_spacestation__/graphics/water/water1.png",
           count = 8,
@@ -340,12 +338,12 @@ for k,v in pairs(updates) do
    spaceTile[k] = updates[k]
 end
 
-  -----------//////////////////////////////////////////////////////////////spaceStationTile
+--//////////////////////////////////////////////////////////////spaceStationTile
 local spaceStationTile = table.deepcopy(data.raw.tile["refined-concrete"])
 local updates = {
     name = "space-station-tile",
     collision_mask = {
-       "layer-11"
+       space_layer,
     },
     --autoplace = autoplace_settings("grass-1", "grass", {{0, 0.7}, {1, 1}}),
     variants = tile_variations_template(
@@ -394,7 +392,8 @@ data:extend{
    spaceStationTile,
 }
 
+local floor_collision = "layer-" .. settings.startup["tater-spacestation-floor-collision"].value
 for item, data in pairs(data.raw.tile) do
    if data.name == "space-tile" or data.name == "space-station-tile" then return end
-   table.insert(data.collision_mask, "layer-12")
+   table.insert(data.collision_mask, floor_collision)
 end
