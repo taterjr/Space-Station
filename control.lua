@@ -15,13 +15,7 @@ local function create_space_surface() --makes a surface named space filled with 
 	 height = 0,
 	 starting_area = "none",
 	 peaceful_mode = true,
-	 autoplace_controls = {
-	 },
       }
-      local autoplace_controls = { "coal", "copper-ore", "crude-oil", "desert", "dirt", "enemy-base", "iron-ore", "sand", "stone", "trees", "uranium-ore"}
-      for name, value in ipairs(autoplace_controls) do
-	 settings.autoplace_controls[value] = { frequency = "none" }
-      end
       local surface = game.create_surface("space", settings)
       game.surfaces["space"].request_to_generate_chunks({0,0}, 3)
       game.surfaces["space"].always_day = true
