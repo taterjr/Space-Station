@@ -132,76 +132,26 @@ end
 --##############################################################################
    
 local function create_space_elevator(event)
-   if event.created_entity.name:sub(1, 14) ~= "space-elevator" then return end -- if the entity is not prefixed with space-elevator dont do anything
-   local surface = event.created_entity.surface
-   local linking_surface = get_linking_surface(surface)
-   local tile_fill = nil
-   local entity = event.created_entity
-   local new_space_elevator = nil
+   -- when a space elevator is placed
+   -- place another in the opposite surface
+   if event.created_entity.name:sub(1, 14) ~= "space-elevator" then return end
 
-   --player_print(entity.bounding_box.left_top.x .. " " .. entity.bounding_box.left_top.y)
-   --player_print(entity.bounding_box.right_bottom.x .. " " .. entity.bounding_box.right_bottom.y)
-
-   if linking_surface == global.spaceSurface then
-      tile_fill = "space-station-tile"
-   else
-      tile_fill = "grass-1"
-   end
-
-   --for i, entites in pairs(linking_surface.find_entities(entity.bounding_box)) do
-      --player_print(i)
-   --end
+   -- get opposite surface
+   local linking_surface = get_linking_surface(event.created_entity.surface)
 
    -- check if chunk is generated
-   local chunk_pos = {}
-   chunk_pos.x = math.floor(entity.position.x) / 32
-   chunk_pos.y = math.floor(entity.position.y) / 32
-   for y = chunk_pos.y-1, chunk_pos.y+1 do
-      for x = chunk_pos.x-1, chunk_pos.x+1 do
-	 if not global.spaceSurface.is_chunk_generated({x = x, y = y}) then
-	    player_print("This is not a valid position")
-	    surface.create_entity{
-	       name = "flying-text",
-	       position = entity.position,
-	       text = { "item-limitation.chunk-not-generated" },
-	    }
-	    entity.destroy()
-	    return
-	 end
-      end
-   end
+   if is_chunk_generated(linking_surface, event.created_entity, 8) == false then return end
+
    -- generate tiles under the space elevator when there is water or space under it
-   linking_surface.request_to_generate_chunks(entity.position, 5)
-   local tiles = {}
-   for x = entity.selection_box.left_top.x-1, entity.selection_box.right_bottom.x do
-      for y = entity.selection_box.left_top.y-1, entity.selection_box.right_bottom.y do
-	 local tile = linking_surface.get_tile(x,y).name
-	 if string.find(tile, "water") or tile == "space-tile" then
-	    table.insert(tiles, {name = tile_fill, position = {x,y}})
-	 end
-      end
-   end
-   linking_surface.set_tiles(tiles)
+   generate_tiles(linking_surface, event.created_entity.selection_box)
 
    -- check if a valid position
-   if linking_surface.can_place_entity{ name = entity.name, position = entity.position} then
-      new_space_elevator = linking_surface.create_entity{
-	 name = entity.name,
-	 position = entity.position,
-	 force = entity.force,
-      }
-   end
-
-   if new_space_elevator == nil then
-      player_print("This position is not valid please try another position")
-      surface.create_entity{
-	 name = "flying-text",
-	 position = entity.position,
-	 text = { "item-limitation.space-not-empty" }, -- make a localized string
-      }
-      entity.destroy()
+   local created = create_valid_entity(linking_surface, event.created_entity)
+   if created then
+      -- add to global.space_elevator
+      table.insert(global.space_elevator, event.created_entity.position)
    else
-	 table.insert(global.space_elevator, new_space_elevator.position)
+      -- return item to player/robot or place item on ground
    end
 end
 
