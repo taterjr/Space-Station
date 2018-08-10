@@ -43,10 +43,10 @@ end
 local function init_globals()
    
    --global.space_elevator_chest = {}
-   global.space_elevator = {}
-   global.space_energy = {}
-   global.space_pipe = {}
-   global.spaceSurface = create_space_surface()
+   global.space_elevator = global.space_elevator or {}
+   global.space_energy = global.space_energy or {}
+   global.space_pipe = global.space_pipe or {}
+   global.spaceSurface = global.spaceSurface or create_space_surface()
 end
 
 --##############################################################################
@@ -379,6 +379,10 @@ end
 script.on_init(function()
       --create space station surface
       --create_space_surface()
+      init_globals()
+end)
+
+script.on_configuration_changed(function()
       init_globals()
 end)
 
