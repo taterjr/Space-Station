@@ -22,6 +22,10 @@ local updates = {
 	 type = "unlock-recipe",
 	 recipe = "space-energy-output",
       },
+      {
+	 type = "unlock-recipe",
+	 recipe = "space-pipe",
+      },
    },
    prerequisites = { "rocket-silo" },
    unit = {

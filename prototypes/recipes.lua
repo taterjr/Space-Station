@@ -119,7 +119,7 @@ end
 local space_pipe = {
    type = "recipe",
    name = "space-pipe",
-   enabled = true,
+   enabled = false,
    ingredients = {
       {"low-density-structure", 100},
       {"pipe", 10},
