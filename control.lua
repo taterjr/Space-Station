@@ -45,6 +45,7 @@ local function init_globals()
    --global.space_elevator_chest = {}
    global.space_elevator = {}
    global.space_energy = {}
+   global.space_pipe = {}
    global.spaceSurface = create_space_surface()
 end
 
@@ -328,6 +329,53 @@ local function teleport_power()
    end
 end
 
+local function teleport_fluids()
+   if game.tick % 60 ~= 0 then return end
+
+   for i, pipe_pos in pairs(global.space_pipe) do
+      local surface_pipe = game.surfaces["nauvis"].find_entity("space-pipe", pipe_pos)
+      local space_pipe = global.spaceSurface.find_entity("space-pipe", pipe_pos)
+
+      if surface_pipe.valid and space_pipe.valid then
+	 local surface_boxes = surface_pipe.fluidbox
+	 local surface_box = surface_boxes[1]
+	 local space_boxes = space_pipe.fluidbox
+	 local space_box = space_boxes[1]
+	 if surface_box ~= nil and space_box ~= nil then
+	    player_print(surface_box.name .. " " .. space_box.name)
+	    if surface_box.name == space_box.name then
+	       -- both have the same type of fluids
+	       local sur_amount = surface_box.amount
+	       local sp_amount = space_box.amount
+
+	       local trans_amount = (sur_amount + sp_amount) * surface_boxes.get_capacity(1) / (surface_boxes.get_capacity(1) + space_boxes.get_capacity(1)) - sp_amount
+
+	       surface_box.amount = sur_amount - trans_amount
+	       space_box.amount = sp_amount + trans_amount
+	       surface_boxes[1] = surface_box
+	       space_boxes[1] = space_box
+	    end
+	 elseif surface_box ~= nil then
+	    -- only surface has fluid
+	    local sur_amount = surface_box.amount
+	    local trans_amount = sur_amount * space_boxes.get_capacity(1) / (surface_boxes.get_capacity(1) + space_boxes.get_capacity(1))
+	    surface_box.amount = sur_amount - trans_amount
+	    surface_boxes[1] = surface_box
+	    surface_box.amount = trans_amount
+	    space_boxes[1] = surface_box
+	 elseif space_box ~= nil then
+	    -- only space has fluid
+	    local sp_amount = space_box.amount
+	    local trans_amount = sp_amount * surface_boxes.get_capacity(1) / (surface_boxes.get_capacity(1) + space_boxes.get_capacity(1))
+	    space_box.amount = sp_amount - trans_amount
+	    space_boxes[1] = space_box
+	    space_box.amount = trans_amount
+	    surface_boxes[1] = space_box
+	 end
+      end
+   end
+end
+
 script.on_init(function()
       --create space station surface
       --create_space_surface()
@@ -338,6 +386,7 @@ script.on_event(defines.events.on_tick, function(event)
 		   -- when a player walks into a space elevator teleport them
 		   teleport_players()
 		   teleport_items_chest()
+		   teleport_fluids()
 		   teleport_power()
 end)
 
@@ -350,6 +399,7 @@ script.on_event({defines.events.on_built_entity, defines.events.on_robot_built_e
       create_linking_entity(event, global.space_elevator, "space-elevator")
       create_linking_entity(event, global.space_energy, "space-energy-input", "space-energy-output")
       create_linking_entity(event, global.space_energy, "space-energy-output", "space-energy-input")
+      create_linking_entity(event, global.space_pipe, "space-pipe")
 end)
 
 script.on_event({defines.events.on_player_built_tile, defines.events.on_robot_built_tile}, function(event)
@@ -360,4 +410,5 @@ script.on_event({defines.events.on_player_mined_entity, defines.events.on_robot_
       destroy_linking_entity(event, global.space_elevator, "space-elevator")
       destroy_linking_entity(event, global.space_energy, "space-energy-input", "space-energy-output")
       destroy_linking_entity(event, global.space_energy, "space-energy-output", "space-energy-input")
+      destroy_linking_entity(event, global.space_pipe, "space-pipe")
 end)

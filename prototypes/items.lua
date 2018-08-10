@@ -91,6 +91,17 @@ for k,v in pairs(updates) do
    space_energy_output [k] = updates[k]
 end
 
+local space_pipe = table.deepcopy(data.raw.item.pipe)
+local updates = {
+   name = "space-pipe",
+   place_result = "space-pipe",
+   subgroup = "space-station",
+}
+
+for k,v in pairs(updates) do
+   space_pipe[k] = updates[k]
+end
+
 data:extend({
       spaceElevator,
       spaceElevatorChest,
@@ -99,4 +110,5 @@ data:extend({
       spaceAssembler,
       space_energy_input,
       space_energy_output,
+      space_pipe,
 })

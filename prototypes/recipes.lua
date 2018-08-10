@@ -115,6 +115,19 @@ for k,v in pairs(updates) do
    space_energy_output[k] = updates[k]
 end
 
+-- space pipe
+local space_pipe = {
+   type = "recipe",
+   name = "space-pipe",
+   enabled = true,
+   ingredients = {
+      {"low-density-structure", 100},
+      {"pipe", 10},
+   },
+   energy = 1,
+   result = "space-pipe",
+}
+
 data:extend({
       spaceStationCategory,
       spaceElevator,
@@ -125,4 +138,5 @@ data:extend({
       spaceScience,
       space_energy_input,
       space_energy_output,
+      space_pipe,
 })
