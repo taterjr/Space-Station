@@ -142,6 +142,7 @@ local function create_linking_entity(event, global_array, entity_name, linking_e
    -- entity_name - the name of the entity
    -- linking_entity_name(optional) - the name of the entity that gets placed on the opposite surface
 
+   if event.created_entity.valid == false then return end
    if event.created_entity.name ~= entity_name then return end
 
    -- get opposite surface
