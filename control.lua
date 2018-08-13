@@ -21,7 +21,7 @@ local function create_space_surface() --makes a surface named space filled with 
       game.surfaces["space"].always_day = true
       return surface
    end
-   return nil
+   return game.surfaces["space"]
 end
 
 local function generate_space_surface(event)
