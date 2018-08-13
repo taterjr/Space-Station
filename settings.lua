@@ -14,7 +14,7 @@ data:extend{
       setting_type = "startup",
       minimum_value = 11,
       maximum_value = 15,
-      default_value = 12,
+      default_value = 13,
       order = "a-b",
    }
 }
