@@ -61,28 +61,17 @@ local function get_linking_surface(surface)
    end
 end
 
-local function is_chunk_generated(linking_surface, entity)
-   local chunk_pos = {}
-   local area = entity.selection_box
-   local entity_size = math.abs(area.left_top.x - area.right_bottom.x)
-   chunk_pos.x = math.floor(entity.position.x) / 32
-   chunk_pos.y = math.floor(entity.position.y) / 32
-   for y = chunk_pos.y-1, chunk_pos.y+1 do
-      for x = chunk_pos.x-1, chunk_pos.x+1 do
-	 if not linking_surface.is_chunk_generated{x = x, y = y} then
-	    player_print("The Chunk is not generated! Please try again")
-	    entity.surface.create_entity{
-	       name = "flying-text",
-	       position = entity.position,
-	       text = { "item-limitation.chunk-not-generated" },
-	    }
-	    linking_surface.request_to_generate_chunks(entity.position, math.ceil(entity_size/2) + 1)
-	    entity.destroy()
-	    return false
+local function is_chunk_missing(surface, entity)
+   local position = entity.position
+   local chunk_position = {x = math.floor(position.x) / 32, y = math.floor(position.y) / 32}
+   for y = chunk_position.y-1, chunk_position.y+1 do
+      for x = chunk_position.x-1, chunk_position.x+1 do
+	 if not surface.is_chunk_generated({x = x, y = y}) then
+	    return true
 	 end
       end
    end
-   return true
+   return false
 end
 
 local function generate_tiles(linking_surface, area)
@@ -148,8 +137,12 @@ local function create_linking_entity(event, global_array, entity_name, linking_e
    -- get opposite surface
    local linking_surface = get_linking_surface(event.created_entity.surface)
 
-   -- check if chunk is generated
-   if is_chunk_generated(linking_surface, event.created_entity) == false then return end
+   -- check if chunk is missing
+   if is_chunk_missing(linking_surface, event.created_entity) then
+      -- generate chunks if they are missing
+      linking_surface.request_to_generate_chunks(event.created_entity.position, 4) 
+      linking_surface.force_generate_chunk_requests()
+   end
 
    -- generate tiles
    generate_tiles(linking_surface, event.created_entity.selection_box)
