@@ -94,31 +94,6 @@ local function generate_tiles(linking_surface, area)
    linking_surface.set_tiles(tiles)
 end
 
-local function create_valid_entity(linking_surface, old_entity, new_entity_name) -- new enity name optional
-   local entity_name = new_entity_name or old_entity.name
-
-   if linking_surface.can_place_entity{
-      name = entity_name,
-      position = old_entity.position,
-   } then
-      -- create new entity
-      linking_surface.create_entity{
-	 name = entity_name,
-	 position = old_entity.position,
-	 force = old_entity.force,
-      }
-      return true
-   else 
-      -- entity creation failed
-      old_entity.surface.create_entity{
-	 name = "flying-text",
-	 position = old_entity.position,
-	 text = { "item-limitation.space-not-empty" },
-      }
-      old_entity.destroy()
-      return false
-   end
-end
 --##############################################################################
 -- space linking
 --##############################################################################
@@ -147,18 +122,45 @@ local function create_linking_entity(event, global_array, entity_name, linking_e
    -- generate tiles
    generate_tiles(linking_surface, event.created_entity.selection_box)
 
-   -- check if valid position
-   local created = nil
-   if linking_entity_name == nil then
-      created = create_valid_entity(linking_surface, event.created_entity)
-   else
-      created = create_valid_entity(linking_surface, event.created_entity, linking_entity_name)
-   end
-   if created then
-      -- add to global.space_energy array
+   -- place entity
+
+   if linking_surface.can_place_entity{
+      name = (linking_entity_name or event.created_entity.name),
+      position = event.created_entity.position,
+      force = event.created_entity.force,
+   } then
+      -- if there is nothing blocking the entity place the entity
+      generate_tiles(linking_surface, event.created_entity.selection_box)
+      linking_surface.create_entity{
+	 name = (linking_entity_name or event.created_entity.name),
+	 position = event.created_entity.position,
+	 force = event.created_entity.force,
+      }
+      -- and insert the entity to it's global array
       table.insert(global_array, event.created_entity.position)
    else
-      -- return item to player/robot or place item on ground
+      -- return item to player or place item on ground
+      local is_inserted = false
+      if event.name == defines.events.on_built_entity then
+	 -- place item in players inventory
+	 local inserted = game.players[event.player_index].insert{name = event.created_entity.name, count = 1}
+	 if inserted == 1 then
+	    -- player inventory is full
+	    is_inserted = true
+	 end
+      end
+      if is_inserted == false then
+	 -- spill item on ground
+	 event.created_entity.surface.spill_item_stack(event.created_entity.position, {name = event.created_entity.name, count = 1}, true) 
+      end
+
+      -- display error
+      event.created_entity.surface.create_entity{
+	 name = "flying-text",
+	 position = event.created_entity.position,
+	 text = { "item-limitation.space-not-empty" },
+      }
+      event.created_entity.destroy()
    end
 end
 
